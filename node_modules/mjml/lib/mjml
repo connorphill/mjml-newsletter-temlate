@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+'use strict';
+
+var _commander = require('commander');
+
+var _commander2 = _interopRequireDefault(_commander);
+
+var _index = require('./index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _cli = require('./cli');
+
+var _cli2 = _interopRequireDefault(_cli);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * If require.main
+ */
+var main = function main() {
+  /*
+   * Parse the command line arguments
+   */
+  _commander2.default.version(_cli2.default.version());
+
+  _commander2.default.option('-r, --render <file>', 'Compiles an MJML file').option('-w, --watch <file>', 'Watch and render an MJML file').option('-o, --output <file>', 'Redirect the HTML to a file', 'a.html').option('-m, --min', 'Minify the final output file', 'false').option('-e, --ending', 'Specifies that the newly created component is an ending tag').option('--register <name>', 'Initialize a self-registering MJML component (deprecated)').option('--init-component <name>', 'Initialize an MJML component');
+
+  _commander2.default.parse(process.argv);
+
+  switch (true) {
+    case !!_commander2.default.watch:
+      return _cli2.default.watch(_commander2.default.watch, _commander2.default);
+    case !!_commander2.default.render:
+      return _cli2.default.render(_commander2.default.render, _commander2.default);
+    case !!_commander2.default.register:
+      console.error("--register option is deprecated, please now use --init-component");return process.exit(1);
+    case !!_commander2.default.initComponent:
+      return _cli2.default.initComponent(_commander2.default.initComponent, _commander2.default.ending, false);
+    default:
+      return console.log(_cli2.default.version());
+  }
+};
+
+/*
+ * Importing this library in your project will
+ * give you the MJML engine
+ */
+module.exports = _index2.default;
+
+if (require.main === module) {
+  main();
+}
+//# sourceMappingURL=mjml.js.map
